@@ -1,8 +1,7 @@
-
 import os
 import boto3
 import uuid
-from datetime import datetime
+from datetime import datetime, UTC
 import json
 
 dynamodb = boto3.resource('dynamodb')
@@ -14,7 +13,7 @@ def handler(event, context):
         body = json.loads(event['body'])
         log_entry = {
             "ID": str(uuid.uuid4()),
-            "DateTime": datetime.utcnow().isoformat(),
+            "DateTime": datetime.now(UTC).isoformat(),
             "Severity": body.get("Severity", "info"),
             "Message": body["Message"]
         }
