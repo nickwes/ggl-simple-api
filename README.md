@@ -126,8 +126,8 @@ Note: While using *FullAccess policies is easier, it's recommended to create a c
 ```
 ├── save_log.py         # Source code for saving logs Lambda function
 ├── retrieve_logs.py    # Source code for retrieving logs Lambda function
-├── save_log.zip        # Deployment package for save_log Lambda (generated)
-├── retrieve_logs.zip   # Deployment package for retrieve Lambda (generated)
+├── save_log.zip        # Deployment package for save_log Lambda 
+├── retrieve_logs.zip   # Deployment package for retrieve Lambda 
 ├── main.tf            # Terraform configuration file
 ├── .github/
 │   └── workflows/
