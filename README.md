@@ -143,20 +143,6 @@ Note: While using *FullAccess policies is easier, it's recommended to create a c
   - Generated from the .py files
   - Must be created before running Terraform (detailed below)
   
-### Deployment Package Creation
-1. Manual Creation:
-   ```bash
-   zip save_log.zip save_log.py
-   zip retrieve_logs.zip retrieve_logs.py
-   ```
-
-2. CI/CD Creation:
-   * Uncomment the zip creation steps in `.github/workflows/deploy.yml`
-   * The pipeline will automatically create the zip files before Terraform runs
-
-Note: The .zip files should be added to .gitignore as they are generated artifacts
-```
-
 ## How to Run the Pipeline
 
 1. Commit Changes:

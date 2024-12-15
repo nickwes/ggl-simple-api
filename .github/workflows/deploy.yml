@@ -17,6 +17,7 @@ jobs:
         with:
           python-version: '3.9'
 
+      # In a future version, we will create the ZIP files here
       #- name: Create Lambda ZIP files
       #  run: |
           # Create save_log.zip
@@ -27,7 +28,6 @@ jobs:
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
-        with:
           terraform_version: 1.5.0
 
       - name: Configure AWS Credentials

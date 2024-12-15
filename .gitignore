@@ -6,9 +6,6 @@
 crash.log
 crash.*.log
 
-# Lambda deployment packages
-*.zip
-
 # Local .terraform directories
 **/.terraform/*
 
