@@ -117,3 +117,68 @@ To destroy the deployed infrastructure, run the following command locally or mod
 ```bash
 terraform destroy -auto-approve
 ```
+
+---
+
+# Log Service Infrastructure
+
+This project demonstrates the use of AWS Lambda, API Gateway, and DynamoDB to build a serverless logging service. The infrastructure is defined using Terraform and is Optimized for the Free Tier.
+
+---
+
+## Architecture Overview
+
+1. **DynamoDB**: A table to store log entries with a provisioned mode, ensuring operations fall within the Free Tier limits.
+2. **Lambda Functions**: Two functions handle log operations:
+   - **SaveLogFunction**: Saves incoming log data to the DynamoDB table.
+   - **RetrieveLogsFunction**: Retrieves log data from the table.
+3. **API Gateway**: Exposes the Lambda functions as HTTP endpoints for external applications to interact with the service.
+
+---
+
+## Infrastructure Components
+
+### DynamoDB Table
+
+The DynamoDB table `LogTable` is used to store logs. It is configured in **Provisioned mode** to utilize Free Tier limits. The table has a single attribute:
+- **`ID` (String)**: Acts as the primary key for the table.
+
+---
+
+### Lambda Functions
+
+Two Lambda functions process log data:
+- **SaveLogFunction**:
+  - Accepts `POST /log` requests with log details.
+  - Saves the data to `LogTable` in DynamoDB.
+  - Uses a `save_log.zip` deployment package.
+
+- **RetrieveLogsFunction**:
+  - Accepts `GET /logs` requests to fetch all logs from `LogTable`.
+  - Uses a `retrieve_logs.zip` deployment package.
+
+**Common Configuration**:
+- **Runtime**: Python 3.9
+- **Environment Variables**:
+  - `DYNAMODB_TABLE`: Name of the DynamoDB table.
+- **Optimizations**:
+  - Memory size: `128 MB`
+  - Timeout: `5 seconds`
+
+---
+
+### API Gateway
+
+An HTTP API Gateway provides endpoints for the Lambda functions:
+- `POST /log`: Routes requests to `SaveLogFunction`.
+- `GET /logs`: Routes requests to `RetrieveLogsFunction`.
+
+---
+
+### IAM Role and Policies
+
+An IAM role is created for the Lambda functions with the following policies:
+- **`AWSLambdaBasicExecutionRole`**: Allows basic Lambda execution.
+- **`AmazonDynamoDBFullAccess`**: Grants full access to DynamoDB.
+
+---
