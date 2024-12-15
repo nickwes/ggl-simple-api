@@ -200,8 +200,12 @@ This project demonstrates the use of AWS Lambda, API Gateway, and DynamoDB to bu
 
 ### DynamoDB Table
 
-The DynamoDB table `LogTable` is used to store logs. It is configured in **Provisioned mode** to utilize Free Tier limits. The table has a single attribute:
-- **`ID` (String)**: Acts as the primary key for the table.
+The DynamoDB table `LogTable` is used to store logs. It is configured in **Provisioned mode** to utilize Free Tier limits. The table has the following attributes:
+
+- **`ID` (String)**: Acts as the primary key for the table (auto-generated UUID)
+- **`DateTime` (String)**: ISO format timestamp of when the log was created
+- **`Severity` (String)**: Log severity level (defaults to "info")
+- **`Message` (String)**: The actual log message content
 
 ---
 
