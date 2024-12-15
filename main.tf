@@ -110,11 +110,49 @@ resource "aws_apigatewayv2_route" "retrieve_logs_route" {
   target    = "integrations/${aws_apigatewayv2_integration.retrieve_logs_integration.id}"
 }
 
-# Deploy API
+# Create CloudWatch Log Group for API Gateway
+resource "aws_cloudwatch_log_group" "api_gw" {
+  name              = "/aws/api_gw/${aws_apigatewayv2_api.log_service_api.name}"
+  retention_in_days = 1
+}
+
+# Enable logging for the API Gateway stage
 resource "aws_apigatewayv2_stage" "default_stage" {
   api_id      = aws_apigatewayv2_api.log_service_api.id
   name        = "$default"
   auto_deploy = true
+
+  access_log_settings {
+    destination_arn = aws_cloudwatch_log_group.api_gw.arn
+    format = jsonencode({
+      requestId               = "$context.requestId"
+      sourceIp               = "$context.identity.sourceIp"
+      requestTime            = "$context.requestTime"
+      protocol              = "$context.protocol"
+      httpMethod            = "$context.httpMethod"
+      routeKey              = "$context.routeKey"
+      status                = "$context.status"
+      responseLength        = "$context.responseLength"
+      integrationErrorMessage = "$context.integrationErrorMessage"
+    })
+  }
+}
+
+# Lambda permissions for API Gateway
+resource "aws_lambda_permission" "api_gw_save_log" {
+  statement_id  = "AllowAPIGatewayInvoke"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.save_log.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_apigatewayv2_api.log_service_api.execution_arn}/*/*"
+}
+
+resource "aws_lambda_permission" "api_gw_retrieve_logs" {
+  statement_id  = "AllowAPIGatewayInvoke"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.retrieve_logs.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_apigatewayv2_api.log_service_api.execution_arn}/*/*"
 }
 
 output "api_endpoint" {
