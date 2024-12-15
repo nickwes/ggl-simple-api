@@ -71,6 +71,56 @@ The GitHub Actions workflow will:
    * AWS_SECRET_ACCESS_KEY: Your AWS secret key
    * AWS_REGION: Your AWS region (e.g., us-east-1)
 
+## Required AWS Permissions
+
+The AWS user linked to the AWS secrets needs the following permissions to execute this pipeline:
+
+### IAM Permissions
+* `iam:CreateRole`
+* `iam:DeleteRole`
+* `iam:GetRole`
+* `iam:PutRolePolicy`
+* `iam:DeleteRolePolicy`
+* `iam:AttachRolePolicy`
+* `iam:DetachRolePolicy`
+
+### Lambda Permissions
+* `lambda:CreateFunction`
+* `lambda:DeleteFunction`
+* `lambda:GetFunction`
+* `lambda:UpdateFunctionCode`
+* `lambda:UpdateFunctionConfiguration`
+* `lambda:AddPermission`
+* `lambda:RemovePermission`
+
+### DynamoDB Permissions
+* `dynamodb:CreateTable`
+* `dynamodb:DeleteTable`
+* `dynamodb:DescribeTable`
+* `dynamodb:UpdateTable`
+
+### API Gateway Permissions
+* `apigateway:DELETE`
+* `apigateway:GET`
+* `apigateway:PATCH`
+* `apigateway:POST`
+* `apigateway:PUT`
+
+### CloudWatch Permissions
+* `logs:CreateLogGroup`
+* `logs:DeleteLogGroup`
+* `logs:PutRetentionPolicy`
+* `logs:DescribeLogGroups`
+
+You can create an IAM policy with these permissions or use the following managed policies:
+* `AWSLambdaFullAccess`
+* `AmazonDynamoDBFullAccess`
+* `AmazonAPIGatewayAdministrator`
+* `CloudWatchLogsFullAccess`
+* `IAMFullAccess`
+
+Note: While using *FullAccess policies is easier, it's recommended to create a custom policy with only the required permissions for better security.   
+
 ## Folder Structure
 
 Ensure the repository has the following structure:
