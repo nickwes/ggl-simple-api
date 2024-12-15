@@ -218,7 +218,7 @@ Two Lambda functions process log data:
   - Uses a `save_log.zip` deployment package.
 
 - **RetrieveLogsFunction**:
-  - Accepts `GET /logs` requests to fetch all logs from `LogTable`.
+  - Accepts `GET /logs` requests to fetch the latest 100 logs from `LogTable` in JSON format, sorted by most recent.
   - Uses a `retrieve_logs.zip` deployment package.
 
 **Common Configuration**:
