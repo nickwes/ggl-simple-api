@@ -123,14 +123,40 @@ Note: While using *FullAccess policies is easier, it's recommended to create a c
 
 ## Folder Structure
 
-Ensure the repository has the following structure:
 ```
-├── save_log.zip        # Python code
-├── retrieve_logs.zip   # Python code
+├── save_log.py         # Source code for saving logs Lambda function
+├── retrieve_logs.py    # Source code for retrieving logs Lambda function
+├── save_log.zip        # Deployment package for save_log Lambda (generated)
+├── retrieve_logs.zip   # Deployment package for retrieve Lambda (generated)
 ├── main.tf            # Terraform configuration file
 ├── .github/
 │   └── workflows/
 │       └── deploy.yml # GitHub Actions workflow file
+```
+
+### Source Files vs Deployment Packages
+* `.py files`: These are the source code files that contain the Lambda function logic
+  - `save_log.py`: Contains the code for saving logs to DynamoDB
+  - `retrieve_logs.py`: Contains the code for retrieving logs from DynamoDB
+
+* `.zip files`: These are deployment packages required by AWS Lambda
+  - Generated from the .py files
+  - Must be created before running Terraform
+  - Can be created manually or through CI/CD pipeline
+  - Command to create: `zip function_name.zip function_name.py`
+
+### Deployment Package Creation
+1. Manual Creation:
+   ```bash
+   zip save_log.zip save_log.py
+   zip retrieve_logs.zip retrieve_logs.py
+   ```
+
+2. CI/CD Creation:
+   * Uncomment the zip creation steps in `.github/workflows/deploy.yml`
+   * The pipeline will automatically create the zip files before Terraform runs
+
+Note: The .zip files should be added to .gitignore as they are generated artifacts
 ```
 
 ## How to Run the Pipeline
