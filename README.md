@@ -141,10 +141,8 @@ Note: While using *FullAccess policies is easier, it's recommended to create a c
 
 * `.zip files`: These are deployment packages required by AWS Lambda
   - Generated from the .py files
-  - Must be created before running Terraform
-  - Must be created manually after changing the *.py files
-      - Command to create: `zip function_name.zip function_name.py`
-
+  - Must be created before running Terraform (detailed below)
+  
 ### Deployment Package Creation
 1. Manual Creation:
    ```bash
