@@ -177,7 +177,7 @@ To destroy the deployed infrastructure, run the following command locally or mod
 terraform destroy -auto-approve
 ```
 
-## A note onTerraform States
+## A note about Terraform States
 
 ### Pipeline vs. Local Execution
 
