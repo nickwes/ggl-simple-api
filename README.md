@@ -8,6 +8,7 @@
    * Configure AWS CLI with credentials using aws configure
 
 2. Prepare the Lambda Functions:
+   * This step can be skipped if the deployment packages are already created
    * Zip the two python files found in the root directory function file individually:
      ```bash
      zip save_log.zip save_log.py
@@ -55,8 +56,7 @@ The GitHub Actions workflow will:
 1. Set up Terraform in the pipeline environment
 2. Authenticate with AWS
 3. Initialize the Terraform backend
-4. Plan the infrastructure deployment
-5. Apply the changes to deploy the infrastructure
+4. Apply the changes to deploy the infrastructure
 
 ## Prerequisites
 
@@ -140,8 +140,7 @@ Note: While using *FullAccess policies is easier, it's recommended to create a c
   - `retrieve_logs.py`: Contains the code for retrieving logs from DynamoDB
 
 * `.zip files`: These are deployment packages required by AWS Lambda
-  - Generated from the .py files
-  - Must be created before running Terraform (detailed below)
+  - Have already been generated from the .py files
   
 ## How to Run the Pipeline
 
@@ -177,6 +176,26 @@ To destroy the deployed infrastructure, run the following command locally or mod
 ```bash
 terraform destroy -auto-approve
 ```
+
+## A note onTerraform States
+
+### Pipeline vs. Local Execution
+
+1. **Pipeline Execution**:
+   - When you run Terraform through the CI/CD pipeline (GitHub Actions), the state file is typically stored remotely (e.g., in a backend like S3, Terraform Cloud, etc.).
+   - This means that the state file is not available locally, and any resources created or modified by the pipeline will not be reflected in your local Terraform state.
+
+2. **Local Execution**:
+   - If you run Terraform locally, it will create and manage a local state file (usually named `terraform.tfstate`).
+   - This local state file will not include any resources created by the pipeline unless you explicitly import them into your local state.
+
+### Implications
+
+- **Destroying Resources**: 
+  - If you attempt to run `terraform destroy` locally after resources have been created by the pipeline, Terraform will not be able to find those resources in your local state file. As a result, it will not be able to destroy them, leading to confusion and potential orphaned resources in your AWS account.
+  
+- **Improvement for a Future Version of this Project**:
+  - If you plan to manage resources both locally and through a pipeline, we will have to consider using a remote backend for the Terraform state. This allows both environments to share the same state file, ensuring consistency.
 
 ---
 
