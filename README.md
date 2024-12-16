@@ -182,7 +182,9 @@ terraform destroy -auto-approve
 ### Pipeline vs. Local Execution
 
 1. **Pipeline Execution**:
-   - When you run Terraform through the CI/CD pipeline (GitHub Actions), the state file is typically stored remotely (e.g., in a backend like S3, Terraform Cloud, etc.).
+   - When you run Terraform through the CI/CD pipeline (GitHub Actions), Terraform stores the state file (terraform.tfstate) locally in the directory where Terraform is executed.
+   - In the context of GitHub Actions, this means the state file will be stored on the ephemeral GitHub Actions runner.
+   - The runner is destroyed after the workflow run, so the state file is lost.
    - This means that the state file is not available locally, and any resources created or modified by the pipeline will not be reflected in your local Terraform state.
 
 2. **Local Execution**:
